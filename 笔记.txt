@@ -1,0 +1,62 @@
+https://note.youdao.com/web/#/file/recent/note/WEBfd761092074ef68f35c5aa692a564a12/?search=docker
+
+docker 从入门到自动化构建 PHP 环境
+https://learnku.com/articles/19504
+
+docker pull php:7.2-fpm 
+docker pull nginx
+
+以下采用–link 方式创建容器 注意创建顺序
+
+注：
+-i 表示允许我们对容器进行操作
+-t 表示在新容器内指定一个为终端
+-d 表示容器在后台执行
+/bin/bash 这将在容器内启动bash shell
+-p 为容器和宿主机创建端口映射
+--name 为容器指定一个名字
+-v 将容器内路径挂载到宿主机路径
+--privileged=true 给容器特权,在挂载目录后容器可以访问目录以下的文件或者目录
+--link可以用来链接2个容器，使得源容器（被链接的容器）和接收容器（主动去链接的容器）之间可以通过别名通信，解除了容器之间通信对容器IP的依赖
+
+复制容器内到宿主机
+ docker cp mydb:/etc/nginx /server/nginx
+
+
+docker images 
+
+停止容器
+docker stop $(docker ps -q)
+docker rm $(docker ps -aq)
+删除镜像
+docker rmi $(docker images -q)  -f 强制
+
+查看容器配置信息
+docker inspect myphp
+
+进如容器
+docker exec -it myphp /bin/bash
+
+docker run -itd -p 9999:9000 --name myphp -v /Users/mac/Desktop/data/www:/data -v /Users/mac/Desktop/data/php/php.ini:/usr/local/etc/php/php.ini --privileged=true php:7.2-fpm 
+docker run -itd -p 8082:80   --name mynginx -v /Users/mac/Desktop/data/www:/data -v /Users/mac/Desktop/data/logs/nginx.logs:/var/log/nginx -v /Users/mac/Desktop/data/conf.d:/etc/nginx/conf.d --link myphp:myphp  --privileged=true nginx
+
+
+
+docker build -t eovobo:php7.2-fpm-ops.0.1 .
+
+
+扩展简书
+https://www.jianshu.com/p/ce2a26f0c0d1
+amqp扩展
+https://blog.csdn.net/q741983251/article/details/84635092?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_title-2&spm=1001.2101.3001.4242
+
+docker-compose logs
+
+docker-compose up -d 
+docker-compose down
+
+
+
+
+Mac Tunnelblick 安装
+slack

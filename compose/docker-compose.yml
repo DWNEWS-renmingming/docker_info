@@ -1,0 +1,22 @@
+version: "2.0"
+services: 
+  myphp:
+    build: ./php
+    container_name: "myphp"
+    restart: always
+    ports:
+      - "9999:9000"
+    volumes: 
+      - ../www:/data
+  mynginx:
+    build: ./nginx
+    container_name: "mynginx"
+    restart: always
+    ports: 
+      - "8082:80"
+    links: 
+      - "myphp"    
+    volumes: 
+      - ../www:/data
+      - ../conf.d:/etc/nginx/conf.d
+      - ../logs/nginx.logs:/var/log/nginx
